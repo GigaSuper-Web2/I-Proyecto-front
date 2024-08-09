@@ -1,16 +1,9 @@
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Se debe instalar en el root project:
+`npm install`
+`npm install axios`
+`npm install react-router-dom`
+`npm install --save express http-errors body-parser mongoose cors`
+`npm install mongoose`
 
-//esto no es necesario
-### `npm test`
+`npm start`
 
-### `npm run build`
-
-### `npm run eject`
-
-
-## Learn More
-
-### `npm install mongoose`
-
-In the project directory, you can run:
-### `npm start`
