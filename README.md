@@ -2,8 +2,12 @@
 `npm install`
 `npm install axios`
 `npm install react-router-dom`
-`npm install --save express http-errors body-parser mongoose cors`
+
 `npm install mongoose`
 
 `npm start`
+
+
+por si acaso xd
+`npm install --save express http-errors body-parser mongoose cors` xd
 
