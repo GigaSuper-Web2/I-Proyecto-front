@@ -5,6 +5,8 @@
 
 `npm install mongoose`
 
+`npm install @paypal/react-paypal-js`
+
 `npm start`
 
 
