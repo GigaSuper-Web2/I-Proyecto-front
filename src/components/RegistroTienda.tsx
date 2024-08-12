@@ -95,7 +95,7 @@ const RegistroTienda = () => {
             }
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                alert(`Error: ${error.response.data.message}`);
+                alert(`Error: ${error.response.data.message}, es posible que haya una tienda registrada. \nSolo se admite una tienda en la base de datos.`);
             } else {
                 alert('An error occurred while verifying the signature.');
             }
