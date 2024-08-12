@@ -1,11 +1,13 @@
 import React from 'react'
 import { useState } from 'react';
 import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const LoginUsuario = () => {
   
     const [correo, setCorreo] = useState('');
     const [pass, setPassword] = useState('');
+    const navigate = useNavigate();
   
     const verificar = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,6 +20,12 @@ const LoginUsuario = () => {
             if (verifyResponse.status === 200) {
                 alert('Bienvenido.');
                 //navigate pa la compra o algo
+                
+                navigate('/ContenidoTienda');
+
+                //trying navigate (spoiler, it works)
+                //navigate('/RegistroTienda', {state: {enviarDato: 'Soy Kevin'}});
+
 
             }
         }catch{
@@ -34,6 +42,7 @@ const LoginUsuario = () => {
             <div>
                 <input required type="password" placeholder="Contraseña" value={pass} onChange={(e) => setPassword(e.target.value)} />
             </div>
+            <div className='saludo'>hola</div>
         
             <button type="submit">Iniciar Sesion</button>
         

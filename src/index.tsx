@@ -9,6 +9,9 @@ import RegistroTienda from './components/RegistroTienda';
 import RegistroUsuario from './components/RegistroUsuario';
 import BotonPaypal2 from './components/BotonPaypal2';
 import LoginUsuario from './components/LoginUsuario';
+import Navbar from './components/Navbar';
+import PruebaNav from './components/PruebaNav';
+import ContenidoTienda from './components/ContenidoTienda';
 
 
 const root = ReactDOM.createRoot(
@@ -23,6 +26,8 @@ root.render(
     <Route path='/RegistroUsuario' element={<RegistroUsuario />} />
     <Route path='/LoginUsuario' element={<LoginUsuario />} />
     <Route path='/BotonPaypal2' element={<BotonPaypal2 />} />
+    <Route path='/PruebaNav' element={<PruebaNav />} />
+    <Route path='/ContenidoTienda' element={<ContenidoTienda />} />
     
     </Routes>
     

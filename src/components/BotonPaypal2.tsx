@@ -2,8 +2,13 @@ import React from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 // Replace with your actual sandbox or production client ID
+
+//variables que se tienen que actualizar, pedir al usuario y usar useState
+var cliente = 'Acfe62d5FZKmgQhto53gEZC3lj9KJ6DXZFMULxB3nzj9ozzqtnzdIJdd52KOc8rJLdQv94kFeYbAbQsA';
+var monto_total = '15.00';
+
 const initialOptions = {
-  clientId: "Acfe62d5FZKmgQhto53gEZC3lj9KJ6DXZFMULxB3nzj9ozzqtnzdIJdd52KOc8rJLdQv94kFeYbAbQsA",
+  clientId: cliente,
   currency: "USD" // Adjust currency if needed
 };
 
@@ -21,7 +26,7 @@ const BotonPaypal2 = () => {
               purchase_units: [{
                 amount: {
                   currency_code: 'USD', // Required currency code
-                  value: '10.00' // Fixed amount for the transaction
+                  value: monto_total // Fixed amount for the transaction
                 }
               }]
             });

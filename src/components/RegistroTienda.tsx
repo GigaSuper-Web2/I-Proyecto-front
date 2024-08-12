@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; //prueba navigate
 
 const RegistroTienda = () => {
     const [nombre, setNombre] = useState('');
@@ -12,6 +13,9 @@ const RegistroTienda = () => {
     const [pass, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState(''); // Estado para la confirmación de la contraseña
     const [logo, setLogo] = useState<File | null>(null);
+
+    const location = useLocation(); //prueba navigate
+    const mensajeNavigate = location.state?.enviarDato; // Acceder a los datos enviados
 
     const navigate = useNavigate();
 
@@ -136,6 +140,14 @@ const RegistroTienda = () => {
                     <button type="submit">Registrar</button>
                 </form>
             </div>
+            
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <p className='saludo'>el navigate devolvio: {mensajeNavigate}</p>
         </div>
     );
 };
