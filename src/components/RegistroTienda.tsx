@@ -1,4 +1,3 @@
-//Use State para los datos del form
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +10,7 @@ const RegistroTienda = () => {
     const [datoFirma, setDatoFirma] = useState<File | null>(null);
     const [correo, setCorreo] = useState('');
     const [pass, setPassword] = useState('');
+    const [confirmPass, setConfirmPass] = useState(''); // Estado para la confirmación de la contraseña
     const [logo, setLogo] = useState<File | null>(null);
 
     const navigate = useNavigate();
@@ -29,6 +29,11 @@ const RegistroTienda = () => {
     const formlleno = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        if (pass !== confirmPass) { // Verificar que las contraseñas coincidan
+            alert('Las contraseñas no coinciden.');
+            return;
+        }
+
         if (!logo) {
             alert('Please upload a logo.');
             return;
@@ -40,14 +45,14 @@ const RegistroTienda = () => {
             if (datoFirma) {
                 signature = await leerArchivoComoTexto(datoFirma);
             }
-            alert(signature)
+            alert(signature);
             // Crear el objeto JSON con la cadena de texto del archivo PEM si existe
             const json = {
                 idNumber: cedEmpresa,
                 idType: categoria,
                 signature: signature
             };
-            alert(JSON.stringify(json))
+            alert(JSON.stringify(json));
             // Enviar el JSON para verificación si pemTexto existe
             const verifyResponse = await axios.post('http://localhost:5001/bank/validate-signature', json);
 
@@ -82,7 +87,7 @@ const RegistroTienda = () => {
                     alert('Error al registrar la tienda.');
                 }
             } else {
-                alert('la firma no es valida');
+                alert('La firma no es válida.');
             }
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -111,6 +116,7 @@ const RegistroTienda = () => {
                         <input required type="text" placeholder="Categoría" value={categoria} onChange={(e) => setCategoria(e.target.value)} />
                     </div>
                     <div>
+                        <p>Firma digital</p>
                         <input required type="file" accept=".pem" placeholder="Firma Digital" onChange={(e) => setDatoFirma(e.target.files?.[0] || null)} />
                     </div>
                     <div>
@@ -120,6 +126,10 @@ const RegistroTienda = () => {
                         <input required type="password" placeholder="Contraseña" value={pass} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div>
+                        <input required type="password" placeholder="Confirmar Contraseña" value={confirmPass} onChange={(e) => setConfirmPass(e.target.value)} />
+                    </div>
+                    <div>
+                        <p>Logo .svg</p>
                         <input type="file" accept=".svg" onChange={(e) => setLogo(e.target.files?.[0] || null)} //no siempre tienen logo xd 
                         /> 
                     </div>

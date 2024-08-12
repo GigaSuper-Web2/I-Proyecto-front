@@ -8,6 +8,7 @@ import Tiendas from './components/IndexTiendas';
 import RegistroTienda from './components/RegistroTienda';
 import RegistroUsuario from './components/RegistroUsuario';
 import BotonPaypal2 from './components/BotonPaypal2';
+import LoginUsuario from './components/LoginUsuario';
 
 
 const root = ReactDOM.createRoot(
@@ -20,6 +21,7 @@ root.render(
     <Route path='/IndexTiendas' element={<Tiendas />} />
     <Route path='/RegistroTienda' element={<RegistroTienda />} />
     <Route path='/RegistroUsuario' element={<RegistroUsuario />} />
+    <Route path='/LoginUsuario' element={<LoginUsuario />} />
     <Route path='/BotonPaypal2' element={<BotonPaypal2 />} />
     
     </Routes>

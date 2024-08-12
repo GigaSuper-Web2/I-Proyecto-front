@@ -11,7 +11,7 @@ const LoginUsuario = () => {
         e.preventDefault();
 
         try{
-            const url = `http://localhost:5001/${correo}/${pass}`;
+            const url = `http://localhost:5000/loginUsuario/${correo}/${pass}`;
             const verifyResponse = await axios.get(url);
 
             // Manejar la respuesta de la verificación
@@ -28,12 +28,15 @@ const LoginUsuario = () => {
     return (
     <div>
         <form onSubmit={verificar} >
-        <div>
-            <input required type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} />
-        </div>
-        <div>
-            <input required type="password" placeholder="Contraseña" value={pass} onChange={(e) => setPassword(e.target.value)} />
-        </div>
+            <div>
+                <input required type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} />
+            </div>
+            <div>
+                <input required type="password" placeholder="Contraseña" value={pass} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+        
+            <button type="submit">Iniciar Sesion</button>
+        
         </form>
     </div>
   )
