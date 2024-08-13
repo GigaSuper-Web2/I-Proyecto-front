@@ -1,65 +1,61 @@
 import React from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
-// Replace with your actual sandbox or production client ID
 
-//variables que se tienen que actualizar, pedir al usuario y usar useState
-var cliente = 'Acfe62d5FZKmgQhto53gEZC3lj9KJ6DXZFMULxB3nzj9ozzqtnzdIJdd52KOc8rJLdQv94kFeYbAbQsA';
-var monto_total = '15.00';
+const BotonPaypal2: React.FC<{ precio: string, onPurchase: () => void }> = ({ precio, onPurchase }) => {
+    const clienteId = 'Acfe62d5FZKmgQhto53gEZC3lj9KJ6DXZFMULxB3nzj9ozzqtnzdIJdd52KOc8rJLdQv94kFeYbAbQsA';
+    const initialOptions = {
+        
+        clientId: clienteId,
+        currency: "USD"
+    };
+    
 
-const initialOptions = {
-  clientId: cliente,
-  currency: "USD" // Adjust currency if needed
-};
-
-const BotonPaypal2 = () => {
-  return (
-    <PayPalScriptProvider options={initialOptions}>
-      <div>
-        <h1>PayPal Payment</h1>
-
-        {/* PayPal Button */}
-        <PayPalButtons
-          createOrder={(data, actions) => {
-            return actions.order.create({
-              intent: 'CAPTURE', // 'CAPTURE' for immediate capture, 'AUTHORIZE' if you want to capture later
-              purchase_units: [{
-                amount: {
-                  currency_code: 'USD', // Required currency code
-                  value: monto_total // Fixed amount for the transaction
-                }
-              }]
-            });
-          }}
-          onApprove={async (data, actions) => {
-            // Ensure `actions.order` is not `undefined`
-            if (actions.order) {
-              try {
-                // Capture the order
-                const details = await actions.order.capture();
-                // Check if payer details are available
-                if (details.payer && details.payer.name) {
-                  alert(`Transaction completed by ${details.payer.name.given_name}`);
-                } else {
-                  alert('Transaction completed, but payer details are missing.');
-                }
-              } catch (error) {
-                console.error('Capture error:', error);
-                alert('An error occurred while capturing the transaction.');
-              }
-            } else {
-              console.error('Order action is undefined');
-              alert('Order action is undefined.');
-            }
-          }}
-          onError={(err) => {
-            console.error('PayPal Error:', err);
-            alert('An error occurred with PayPal. Please try again.');
-          }}
-        />
-      </div>
-    </PayPalScriptProvider>
-  );
+    return (
+        <PayPalScriptProvider options={initialOptions}>
+            <div>
+                <h1>PayPal Payment</h1>
+                <PayPalButtons
+                    createOrder={(data, actions) => {
+                        alert(`Creating order with amount: ${precio}`);
+                        return actions.order.create({
+                            intent: 'CAPTURE',
+                            purchase_units: [{
+                                amount: {
+                                    currency_code: 'USD',
+                                    value: precio // El precio ya está en formato adecuado
+                                }
+                            }]
+                        });
+                    }}
+                    onApprove={async (data, actions) => {
+                        if (actions.order) {
+                            try {
+                                const details = await actions.order.capture();
+                                if (details.payer && details.payer.name) {
+                                    alert(`Transaction completed by ${details.payer.name.given_name}`);
+                                    // Llamar a la función de compra después de la transacción exitosa
+                                    onPurchase();
+                                } else {
+                                    alert('Transaction completed, but payer details are missing.');
+                                }
+                            } catch (error) {
+                                console.error('Capture error:', error);
+                                alert('An error occurred while capturing the transaction.');
+                            }
+                        } else {
+                            console.error('Order action is undefined');
+                            alert('Order action is undefined.');
+                        }
+                    }}
+                    onError={(err) => {
+                        console.error('PayPal Error:', err);
+                        alert('An error occurred with PayPal. Please try again.');
+                    }}
+                />
+            </div>
+        </PayPalScriptProvider>
+    );
 };
 
 export default BotonPaypal2;

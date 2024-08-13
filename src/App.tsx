@@ -44,7 +44,7 @@ function App() {
         <br />
         <hr />
         <h2>Entrar como dueño de la empresa</h2>
-        <button> Soy el gfe</button>
+        <button onClick={() => navigate('/LoginEmpresa')}> Soy el gfe</button>
 
         <br />
         <br />

@@ -7,11 +7,12 @@ import App from './App';
 import Tiendas from './components/IndexTiendas';
 import RegistroTienda from './components/RegistroTienda';
 import RegistroUsuario from './components/RegistroUsuario';
-import BotonPaypal2 from './components/BotonPaypal2';
 import LoginUsuario from './components/LoginUsuario';
 import Navbar from './components/Navbar';
 import PruebaNav from './components/PruebaNav';
 import ContenidoTienda from './components/ContenidoTienda';
+import LoginEmpresa from './components/LoginEmpresa';
+
 
 
 const root = ReactDOM.createRoot(
@@ -25,9 +26,9 @@ root.render(
     <Route path='/RegistroTienda' element={<RegistroTienda />} />
     <Route path='/RegistroUsuario' element={<RegistroUsuario />} />
     <Route path='/LoginUsuario' element={<LoginUsuario />} />
-    <Route path='/BotonPaypal2' element={<BotonPaypal2 />} />
     <Route path='/PruebaNav' element={<PruebaNav />} />
     <Route path='/ContenidoTienda' element={<ContenidoTienda />} />
+    <Route path='/LoginEmpresa' element={<LoginEmpresa />} />
     
     </Routes>
     

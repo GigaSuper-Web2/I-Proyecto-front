@@ -147,7 +147,7 @@ const RegistroTienda = () => {
             <br />
             <br />
             <br />
-            <p className='saludo'>el navigate devolvio: {mensajeNavigate}</p>
+            <p className='saludo'>prueba del navigate, que devuelve: {mensajeNavigate}</p>
         </div>
     );
 };
