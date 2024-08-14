@@ -12,6 +12,8 @@ import Navbar from './components/Navbar';
 import PruebaNav from './components/PruebaNav';
 import ContenidoTienda from './components/ContenidoTienda';
 import LoginEmpresa from './components/LoginEmpresa';
+import BotonPaypal2 from './components/BotonPaypal2';
+
 
 
 
@@ -29,6 +31,8 @@ root.render(
     <Route path='/PruebaNav' element={<PruebaNav />} />
     <Route path='/ContenidoTienda' element={<ContenidoTienda />} />
     <Route path='/LoginEmpresa' element={<LoginEmpresa />} />
+    <Route path='/BotonPaypal2' element={<BotonPaypal2 />} />
+    
     
     </Routes>
     

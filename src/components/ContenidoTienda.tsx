@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
-import BotonPaypal2 from './BotonPaypal2';
+import { useNavigate } from 'react-router-dom';
 
 const ContenidoTienda: React.FC = () => {
     const [products, setProducts] = useState<any[]>([]);
@@ -11,28 +11,35 @@ const ContenidoTienda: React.FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [quantity, setQuantity] = useState<number>(1);
     const [totalPrice, setTotalPrice] = useState<string>('0.00');
-    const [totalUnitario, setPrecioUnitario] = useState<string>('0.00');
+    const [clienteId, setClienteId] = useState<string>(''); // Estado para clienteId
+    const [tienda, setTienda] = useState<any | null>(null); // Estado para la tienda
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const fetchProductsAndStore = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/obtenerProductos');
-                setProducts(response.data.data.productos);
+                // Obtener productos
+                const productsResponse = await axios.get('http://localhost:5000/obtenerProductos');
+                setProducts(productsResponse.data.data.productos);
+
+                // Obtener información de la tienda
+                const storeResponse = await axios.get('http://localhost:5000/obtenerEmpresa');
+                setTienda(storeResponse.data.data.tienda);
             } catch (err) {
-                setError('Error al obtener los productos.');
+                setError('Error al obtener los productos o la tienda.');
                 console.error(err);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchProducts();
+        fetchProductsAndStore();
     }, []);
 
     const handleShow = (product: any) => {
         setSelectedProduct(product);
-        setQuantity(1);  // Resetea la cantidad al mostrar un nuevo producto
-        setPrecioUnitario(product.precio); // Inicializa el precio total
+        setQuantity(1);
+        setTotalPrice(product.precio);
         setShowModal(true);
     };
 
@@ -47,25 +54,18 @@ const ContenidoTienda: React.FC = () => {
         }
     };
 
-    const handlePurchase = async () => {
-        if (selectedProduct) {
-            try {
-                const response = await axios.put(`http://localhost:5000/actualizarStock/${selectedProduct.id}`, {
-                    cantidadComprada: quantity
-                });
+    const handlePurchase = () => {
+        if (selectedProduct && clienteId) {
+            const purchaseData = {
+                precio: totalPrice,
+                cantidad: quantity,
+                productId: selectedProduct.id,
+                clienteId: clienteId
+            };
 
-                if (response.status === 200) {
-                    alert(`Compra realizada con éxito. Precio Total: $${totalPrice}`);
-                    setShowModal(false);
-                    // Redirigir a ContenidoTienda
-                    window.location.href = '/ContenidoTienda';
-                } else {
-                    alert('Error al actualizar el stock.');
-                }
-            } catch (error) {
-                console.error('Error durante la actualización del stock:', error);
-                alert('Error al realizar la compra.');
-            }
+            navigate('/BotonPaypal2', { state: purchaseData });
+        } else {
+            alert('Por favor, ingrese un clienteId válido.');
         }
     };
 
@@ -74,6 +74,17 @@ const ContenidoTienda: React.FC = () => {
 
     return (
         <div className="container">
+            <div className="text-center mb-4">
+                <br />
+                <br />
+                {tienda ? (
+                    <h1>{tienda.nombreEmpresa}</h1>
+                ) : (
+                    <p>Cargando información de la tienda...</p>
+                )}
+                <br />
+
+            </div>
             <div className="row">
                 {products.map((product) => (
                     <div key={product.id} className="col-md-4">
@@ -113,6 +124,7 @@ const ContenidoTienda: React.FC = () => {
                             <br />
                             <h5>Precio: ${selectedProduct.precio}</h5>
                             <h5>Stock: {selectedProduct.stock}</h5>
+                            <br />
                             <Form.Group>
                                 <Form.Label>Cantidad:</Form.Label>
                                 <Form.Control
@@ -120,11 +132,38 @@ const ContenidoTienda: React.FC = () => {
                                     value={quantity}
                                     onChange={handleQuantityChange}
                                     min="1"
-                                    max={selectedProduct.stock} // Evita que el usuario seleccione más del stock disponible
+                                    max={selectedProduct.stock}
                                 />
                             </Form.Group>
+                            <br />
+                            <Form.Group>
+                                <Form.Label><h5>Cliente ID:</h5></Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={clienteId}
+                                    onChange={(e) => setClienteId(e.target.value)}
+                                    placeholder="Ingrese su Cliente ID proporcionado por PayPal"
+                                />
+                                <br />
+                            </Form.Group>
                             <h5>Precio Total: ${totalPrice}</h5>
-                            <BotonPaypal2 precio={totalPrice} onPurchase={handlePurchase} />
+                            <button 
+                                onClick={handlePurchase}
+                                style={{
+                                    backgroundColor: '#FFD700',
+                                    height: '50px',
+                                    width: '100%',
+                                    border: 'none',
+                                    color: 'black',
+                                    fontSize: '20px',
+                                    fontWeight: 'bold',
+                                    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    marginTop: '20px'
+                                }}>
+                                Proceder al pago
+                            </button>
                         </div>
                     )}
                 </Modal.Body>

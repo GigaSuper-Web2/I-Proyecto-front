@@ -1,29 +1,74 @@
 import React from 'react';
+import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+const BotonPaypal2: React.FC = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
 
-const BotonPaypal2: React.FC<{ precio: string, onPurchase: () => void }> = ({ precio, onPurchase }) => {
-    const clienteId = 'Acfe62d5FZKmgQhto53gEZC3lj9KJ6DXZFMULxB3nzj9ozzqtnzdIJdd52KOc8rJLdQv94kFeYbAbQsA';
+    // Extrae los datos pasados a través de navigate
+    const { precio, cantidad, productId, clienteId } = location.state || { precio: '0.00', cantidad: 0, productId: '', clienteId: '' };
+
+    // Si clienteId no está disponible, muestra un error
+    if (!clienteId) {
+        alert('Cliente ID no proporcionado.');
+        navigate('/ContenidoTienda');
+        return null;
+    }
+
     const initialOptions = {
-        
         clientId: clienteId,
         currency: "USD"
     };
-    
+
+    const onPurchase = async () => {
+        try {
+            const response = await axios.put(`http://localhost:5000/actualizarStock/${productId}`, {
+                cantidadComprada: cantidad
+            });
+
+            if (response.status === 200) {
+                alert('Compra realizada con éxito.');
+                navigate('/ContenidoTienda'); // Redirigir y enviar datos a facturación aquí
+            } else {
+                alert('Error al actualizar el stock.');
+            }
+        } catch (error) {
+            console.error('Error durante la actualización del stock:', error);
+            alert('Error al realizar la compra. No se encuentran mas productos disponibles en stock');
+        }
+    };
 
     return (
         <PayPalScriptProvider options={initialOptions}>
-            <div>
+            <div
+                className='contenedor_paypal'
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    height: '80vh',
+                    textAlign: 'center',
+                    width: '60vw',
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    backgroundColor: '#f0f0f0',
+                    padding: '20px',
+                    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+                    marginTop: '60px',
+                }}
+            >
                 <h1>PayPal Payment</h1>
                 <PayPalButtons
                     createOrder={(data, actions) => {
-                        alert(`Creating order with amount: ${precio}`);
                         return actions.order.create({
                             intent: 'CAPTURE',
                             purchase_units: [{
                                 amount: {
                                     currency_code: 'USD',
-                                    value: precio // El precio ya está en formato adecuado
+                                    value: precio // Usa el precio recibido
                                 }
                             }]
                         });
@@ -34,8 +79,7 @@ const BotonPaypal2: React.FC<{ precio: string, onPurchase: () => void }> = ({ pr
                                 const details = await actions.order.capture();
                                 if (details.payer && details.payer.name) {
                                     alert(`Transaction completed by ${details.payer.name.given_name}`);
-                                    // Llamar a la función de compra después de la transacción exitosa
-                                    onPurchase();
+                                    onPurchase(); // Llama a la función de compra después de la transacción exitosa
                                 } else {
                                     alert('Transaction completed, but payer details are missing.');
                                 }
