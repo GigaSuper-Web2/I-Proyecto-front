@@ -6,6 +6,7 @@
 `npm install mongoose`
 
 `npm install @paypal/react-paypal-js`
+`npm install react-bootstrap bootstrap`
 
 `npm start`
 
