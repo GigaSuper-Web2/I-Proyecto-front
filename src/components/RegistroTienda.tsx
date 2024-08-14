@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom'; //prueba navigate
 
-const RegistroTienda = () => {
+const RegistroTienda = () => { 
     const [nombre, setNombre] = useState('');
     const [propietarioEmpresa, setPropietarioEmpresa] = useState('');
     const [cedEmpresa, setCedEmpresa] = useState('');
@@ -86,7 +86,7 @@ const RegistroTienda = () => {
 
                 if (registerResponse.status === 201) {
                     alert('Tienda registrada :)');
-                    navigate('/App'); // Redirigir a otra página si es necesario
+                    navigate('/PaginaInicio'); // Redirigir a otra página si es necesario
                 } else {
                     alert('Error al registrar la tienda.');
                 }

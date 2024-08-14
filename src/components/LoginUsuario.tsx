@@ -1,54 +1,58 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const LoginUsuario = () => {
-  
     const [correo, setCorreo] = useState('');
     const [pass, setPassword] = useState('');
     const navigate = useNavigate();
-  
+
     const verificar = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try{
+        try {
             const url = `http://localhost:5000/loginUsuario/${correo}/${pass}`;
             const verifyResponse = await axios.get(url);
 
-            // Manejar la respuesta de la verificación
             if (verifyResponse.status === 200) {
-                alert('Bienvenido.');
-                //navigate pa la compra o algo
-                
-                navigate('/ContenidoTienda');
+                const token = verifyResponse.data.token; // Suponiendo que el token se devuelve como 'token'
 
-                //trying navigate (spoiler, it works)
-                //navigate('/RegistroTienda', {state: {enviarDato: 'Soy Kevin'}});
+                // Guardar el token en el localStorage
+                localStorage.setItem('userToken', token);
 
-
+                // Navegar a ContenidoTienda pasando el token
+                navigate('/ContenidoTienda', { state: { token } });
             }
-        }catch{
-
+        } catch (err) {
+            console.error('Error al iniciar sesión:', err);
         }
-    }
+    };
 
     return (
-    <div>
-        <form onSubmit={verificar} >
-            <div>
-                <input required type="email" placeholder="Correo" value={correo} onChange={(e) => setCorreo(e.target.value)} />
-            </div>
-            <div>
-                <input required type="password" placeholder="Contraseña" value={pass} onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <div className='saludo'>hola</div>
-        
-            <button type="submit">Iniciar Sesion</button>
-        
-        </form>
-    </div>
-  )
-}
+        <div>
+            <form onSubmit={verificar}>
+                <div>
+                    <input
+                        required
+                        type="email"
+                        placeholder="Correo"
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <input
+                        required
+                        type="password"
+                        placeholder="Contraseña"
+                        value={pass}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <button type="submit">Iniciar Sesion</button>
+            </form>
+        </div>
+    );
+};
 
-export default LoginUsuario
+export default LoginUsuario;

@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './index.css';
 import App from './App';
-import Tiendas from './components/IndexTiendas';
 import RegistroTienda from './components/RegistroTienda';
 import RegistroUsuario from './components/RegistroUsuario';
 import LoginUsuario from './components/LoginUsuario';
@@ -13,6 +12,9 @@ import PruebaNav from './components/PruebaNav';
 import ContenidoTienda from './components/ContenidoTienda';
 import LoginEmpresa from './components/LoginEmpresa';
 import BotonPaypal2 from './components/BotonPaypal2';
+import PaginaInicio from './components/PaginaInicio';
+import AdminTienda from './components/AdminTienda';
+
 
 
 
@@ -24,7 +26,6 @@ root.render(
   <BrowserRouter>
     <Routes>
     <Route path="/" element={<App />} />
-    <Route path='/IndexTiendas' element={<Tiendas />} />
     <Route path='/RegistroTienda' element={<RegistroTienda />} />
     <Route path='/RegistroUsuario' element={<RegistroUsuario />} />
     <Route path='/LoginUsuario' element={<LoginUsuario />} />
@@ -32,6 +33,8 @@ root.render(
     <Route path='/ContenidoTienda' element={<ContenidoTienda />} />
     <Route path='/LoginEmpresa' element={<LoginEmpresa />} />
     <Route path='/BotonPaypal2' element={<BotonPaypal2 />} />
+    <Route path='/PaginaInicio' element={<PaginaInicio />} />
+    <Route path='/AdminTienda' element={<AdminTienda />} />
     
     
     </Routes>

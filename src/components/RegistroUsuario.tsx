@@ -37,7 +37,7 @@ const RegistroUsuario = () => {
                 console.log(response.data);
                 if (response.data.status_code === 201) {
                     alert('Si');
-                    navigate('/App');
+                    navigate('/ContenidoTienda');
                 }
             } catch (error) {
                 console.error(error);

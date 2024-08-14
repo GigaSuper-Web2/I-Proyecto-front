@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ContenidoTienda: React.FC = () => {
     const [products, setProducts] = useState<any[]>([]);
@@ -14,16 +14,23 @@ const ContenidoTienda: React.FC = () => {
     const [clienteId, setClienteId] = useState<string>(''); // Estado para clienteId
     const [tienda, setTienda] = useState<any | null>(null); // Estado para la tienda
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    const token = location.state?.token || localStorage.getItem('userToken');
 
     useEffect(() => {
         const fetchProductsAndStore = async () => {
             try {
                 // Obtener productos
-                const productsResponse = await axios.get('http://localhost:5000/obtenerProductos');
+                const productsResponse = await axios.get('http://localhost:5000/obtenerProductos', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setProducts(productsResponse.data.data.productos);
 
                 // Obtener información de la tienda
-                const storeResponse = await axios.get('http://localhost:5000/obtenerEmpresa');
+                const storeResponse = await axios.get('http://localhost:5000/obtenerEmpresa', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setTienda(storeResponse.data.data.tienda);
             } catch (err) {
                 setError('Error al obtener los productos o la tienda.');
@@ -34,7 +41,7 @@ const ContenidoTienda: React.FC = () => {
         };
 
         fetchProductsAndStore();
-    }, []);
+    }, [token]);
 
     const handleShow = (product: any) => {
         setSelectedProduct(product);
