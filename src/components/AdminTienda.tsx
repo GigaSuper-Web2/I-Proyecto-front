@@ -17,9 +17,35 @@ const AdminTienda: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const [Idtienda, setIdTienda] = useState('');
+
     const [product_id, setProduct_id] = useState<string>('');
 
     const token = location.state?.token || localStorage.getItem('userToken');
+
+    // const buscaTiendaId = () => {
+
+    // }//cierra busca tienda ID
+
+    const buscaTiendaId =  async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/obtenerEmpresa');
+            setIdTienda(response.data.data.tienda['idtienda']);
+            alert(response.data.data.tienda['idtienda'])
+            
+        }//cierra try
+
+        catch (err) {
+            setError('Error al obtener el ID de la empresa');
+        }//cierra consulta api
+    };
+
+
+    useEffect( () => {
+        buscaTiendaId();
+        
+    }, []);
+
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -57,6 +83,8 @@ const AdminTienda: React.FC = () => {
 
     const handleSaveProduct = async () => {
         const formData = new FormData();
+
+        //formData.append('tiendaId', Idtienda);
         formData.append('nombreProducto', productName);
         formData.append('descripcion', productDescription);
         formData.append('precio', productPrice);
@@ -64,7 +92,7 @@ const AdminTienda: React.FC = () => {
         if (productLogo) {
             formData.append('logoProducto', productLogo);
         }
-        formData.append('tiendaId', token); // Reemplaza con el ID correcto de la tienda
+        formData.append('tiendaId', Idtienda); // Reemplaza con el ID correcto de la tienda
     
         try {
             if (selectedProduct) {
