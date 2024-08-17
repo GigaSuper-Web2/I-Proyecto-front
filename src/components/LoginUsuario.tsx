@@ -15,10 +15,7 @@ const LoginUsuario = () => {
             const verifyResponse = await axios.get(url);
 
             if (verifyResponse.status === 200) {
-                const token = verifyResponse.data.token; // Suponiendo que el token se devuelve como 'token'
-
-                // Guardar el token en el localStorage
-                localStorage.setItem('userToken', token);
+                const token = verifyResponse.data.token; 
 
                 // Navegar a ContenidoTienda pasando el token
                 navigate('/ContenidoTienda', { state: { token } });

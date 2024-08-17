@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,10 +7,103 @@ const BotonPaypal2: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Extrae los datos pasados a través de navigate
-    const { precio, cantidad, productId, clienteId } = location.state || { precio: '0.00', cantidad: 0, productId: '', clienteId: '' };
+    // Se arma un diccionario vacio para guardar los datos en los campos 
+    const [datos, setDatos] = useState({
+        usuario: {
+            nombre: '',
+            apellido: '',
+            direccion: '',
+            correo: ''
+        },
+        empresa: {
+            idtienda: '',
+            nombre: '',
+            categoria: '',
+            correo: '',
+            logo: '',
+            cedula: ''
+        },
+        producto: {
+            nombre: '',
+            precio: ''
+        }
+    });
+    const [jsonFacturacion, setJsonFacturacion] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    // Si clienteId no está disponible, muestra un error
+    // Extrae los datos pasados a través de navigate
+    const { precio, cantidad, productId, clienteId, token_sesion_usuario } = location.state || { precio: '0.00', cantidad: 0, productId: '', clienteId: '', token_sesion_usuario: '' };
+
+    // Función para obtener los datos de usuario, empresa y producto
+    const obtenerDatos = async () => {
+        try {
+            if (!token_sesion_usuario) {
+                console.error('Token de sesión no proporcionado.');
+                return;
+            }
+
+            const [usuarioResponse, empresaResponse, productoResponse] = await Promise.all([ // hace las llamadas al mismo tiempo, antes del pago para recopialar los datos
+                axios.get(`http://localhost:5000/obtenerUsuario/${token_sesion_usuario}`),
+                axios.get('http://localhost:5000/obtenerEmpresa'),
+                axios.get(`http://localhost:5000/productoEspecifico/${productId}`)
+            ]);
+
+            const usuario = usuarioResponse.data.data.user;
+            const empresa = empresaResponse.data.data.tienda;
+            const producto = productoResponse.data.data.producto;
+
+            setDatos({
+                usuario: {
+                    nombre: usuario.nombre || '',
+                    apellido: usuario.apellidos || '',
+                    direccion: usuario.lugarResidencia || '',
+                    correo: usuario.email || ''
+                },
+                empresa: {
+                    idtienda: empresa.idtienda || '',
+                    nombre: empresa.nombreEmpresa || '',
+                    categoria: empresa.categoria || '',
+                    correo: empresa.email || '',
+                    logo: empresa.logoTienda || '',
+                    cedula: empresa.cedulaEmpresa || ''
+                },
+                producto: {
+                    nombre: producto.nombreProducto || '',
+                    precio: producto.precio || ''
+                }
+            });
+
+            // Construye el JSON de facturación
+            const json_facturacion = {
+                'nombre_comercial': empresa.nombreEmpresa || '',
+                'logo_empresa': empresa.logoTienda || '',
+                'ced_juridica': empresa.cedulaEmpresa || '',
+                'correo_empresa': empresa.email || '',
+                'cod_producto': productId || '',
+                'nombre_producto': producto.nombreProducto || '',
+                'cant_compra': cantidad || 0,
+                'precio_unitario': producto.precio || '',
+                'monto_total': precio || '',
+                'nombre_cliente': usuario.nombre || '',
+                'apellido_cliente': usuario.apellidos || '',
+                'direccion_usuario': usuario.lugarResidencia || ''
+            };
+
+            setJsonFacturacion(json_facturacion);
+
+        } catch (err) {
+            console.error('Error al obtener los datos:', err);
+            alert('Error al obtener los datos. Por favor, inténtalo de nuevo.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        obtenerDatos();
+    }, [token_sesion_usuario, productId]);
+
+    // Verifica si clienteId está disponible
     if (!clienteId) {
         alert('Cliente ID no proporcionado.');
         navigate('/ContenidoTienda');
@@ -30,15 +123,25 @@ const BotonPaypal2: React.FC = () => {
 
             if (response.status === 200) {
                 alert('Compra realizada con éxito.');
-                navigate('/ContenidoTienda'); // Redirigir y enviar datos a facturación aquí
+
+                console.log('Datos de facturación:', jsonFacturacion);
+                const jsonString = JSON.stringify(jsonFacturacion, null, 2);
+                alert(jsonString);
+
+
+                navigate('/ContenidoTienda');
             } else {
                 alert('Error al actualizar el stock.');
             }
         } catch (error) {
             console.error('Error durante la actualización del stock:', error);
-            alert('Error al realizar la compra. No se encuentran mas productos disponibles en stock');
+            alert('Error al realizar la compra. No se encuentran más productos disponibles en stock.');
         }
     };
+
+    if (loading) {
+        return <div>Cargando datos...</div>;
+    }
 
     return (
         <PayPalScriptProvider options={initialOptions}>
@@ -68,7 +171,7 @@ const BotonPaypal2: React.FC = () => {
                             purchase_units: [{
                                 amount: {
                                     currency_code: 'USD',
-                                    value: precio // Usa el precio recibido
+                                    value: precio
                                 }
                             }]
                         });
@@ -79,7 +182,7 @@ const BotonPaypal2: React.FC = () => {
                                 const details = await actions.order.capture();
                                 if (details.payer && details.payer.name) {
                                     alert(`Transaction completed by ${details.payer.name.given_name}`);
-                                    onPurchase(); // Llama a la función de compra después de la transacción exitosa
+                                    onPurchase();
                                 } else {
                                     alert('Transaction completed, but payer details are missing.');
                                 }

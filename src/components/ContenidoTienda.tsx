@@ -16,7 +16,7 @@ const ContenidoTienda: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     
-    const token = location.state?.token || localStorage.getItem('userToken');
+    const token = location.state?.token;
 
     useEffect(() => {
         const fetchProductsAndStore = async () => {
@@ -67,7 +67,8 @@ const ContenidoTienda: React.FC = () => {
                 precio: totalPrice,
                 cantidad: quantity,
                 productId: selectedProduct.id,
-                clienteId: clienteId
+                clienteId: clienteId,
+                token_sesion_usuario: token
             };
 
             navigate('/BotonPaypal2', { state: purchaseData });
