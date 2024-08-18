@@ -19,17 +19,6 @@ const RegistroTienda = () => {
 
     const navigate = useNavigate();
 
-    const leerArchivoComoTexto = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                resolve(reader.result as string);
-            };
-            reader.onerror = () => reject(new Error('Error reading file'));
-            reader.readAsText(file);
-        });
-    };
-
     const formlleno = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -44,23 +33,24 @@ const RegistroTienda = () => {
         }
 
         try {
-            // Leer el archivo PEM como texto porque se recibe como json
-            let signature: string | null = null;
-            if (datoFirma) {
-                signature = await leerArchivoComoTexto(datoFirma);
-            }
-            alert(signature);
-            // Crear el objeto JSON con la cadena de texto del archivo PEM si existe
-            const json = {
-                idNumber: cedEmpresa,
-                idType: categoria,
-                signature: signature
-            };
-            alert(JSON.stringify(json));
-            // Enviar el JSON para verificación si pemTexto existe
-            const verifyResponse = await axios.post('http://localhost:5001/bank/validate-signature', json);
 
-            // Manejar la respuesta de la verificación
+
+            const formuData = new FormData();
+            formuData.append('idNumber', cedEmpresa);
+            formuData.append('idType', categoria);
+            if (datoFirma) {
+                formuData.append('datoFirmaDigital', datoFirma);
+            }
+            
+            const verifyResponse = await axios.post('http://localhost:5001/bank/validate-signature', formuData);
+            // si no funciona, eliminar el ; y descomentar el header,
+            //{
+            //    headers: {
+            //        'Content-Type': 'multipart/form-data'
+            //    }
+            //});
+
+            //misma respuesta
             if (verifyResponse.status === 200) {
                 alert('Signature is valid.');
 
