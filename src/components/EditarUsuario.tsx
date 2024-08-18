@@ -12,7 +12,7 @@ const EditarUsuario = () => {
     const navigate = useNavigate();
     const location = useLocation();
     
-    const token = location.state?.token || localStorage.getItem('userToken');
+    const token = location.state?.token 
 
     const cambios = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -32,7 +32,7 @@ const EditarUsuario = () => {
         if (lugarResidencia) userData.lugarResidencia = lugarResidencia;
 
         try {
-            const response = await axios.put(`http://localhost:5000/editarUsuario/${token}/`, userData, {
+            const response = await axios.put(`http://localhost:5000/editarUsuario/${token}`, userData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -40,7 +40,7 @@ const EditarUsuario = () => {
             
             if (response.status === 200) {
                 alert('se pudo xd');
-                navigate('/'); 
+                navigate('/ContenidoTienda'); 
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -68,7 +68,7 @@ const EditarUsuario = () => {
                     <input type="password" placeholder="Contraseña" value={passwd} onChange={(e) => setPasswd(e.target.value)} />
                 </div>
                 <div>
-                    <input type="password" placeholder="Repita la contraseña" value={passwd2} onChange={(e) => setPasswd2(e.target.value)} />
+                    <input type="password" placeholder="Confirmar contraseña" value={passwd2} onChange={(e) => setPasswd2(e.target.value)} />
                 </div>
                 <div>
                     <input type="text" placeholder="Lugar de Residencia" value={lugarResidencia} onChange={(e) => setLugarResidencia(e.target.value)} />

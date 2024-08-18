@@ -36,8 +36,8 @@ const RegistroUsuario = () => {
                 });
                 console.log(response.data);
                 if (response.data.status_code === 201) {
-                    alert('Si');
-                    navigate('/ContenidoTienda');
+                    alert('Registro Exitoso!');
+                    navigate('/PaginaInicio');
                 }
             } catch (error) {
                 console.error(error);

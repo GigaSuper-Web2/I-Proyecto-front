@@ -14,6 +14,9 @@ import LoginEmpresa from './components/LoginEmpresa';
 import BotonPaypal2 from './components/BotonPaypal2';
 import PaginaInicio from './components/PaginaInicio';
 import AdminTienda from './components/AdminTienda';
+import EditarTienda from './components/EditarTienda';
+import EditarUsuario from './components/EditarUsuario';
+
 
 
 
@@ -24,6 +27,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter>
+    <Navbar></Navbar>
     <Routes>
     <Route path="/" element={<App />} />
     <Route path='/RegistroTienda' element={<RegistroTienda />} />
@@ -35,6 +39,8 @@ root.render(
     <Route path='/BotonPaypal2' element={<BotonPaypal2 />} />
     <Route path='/PaginaInicio' element={<PaginaInicio />} />
     <Route path='/AdminTienda' element={<AdminTienda />} />
+    <Route path='/EditarTienda' element={<EditarTienda />} />
+    <Route path='/EditarUsuario' element={<EditarUsuario />} />
     
     
     </Routes>

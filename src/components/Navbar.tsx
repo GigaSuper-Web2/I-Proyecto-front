@@ -7,17 +7,9 @@ const Navbar =  () => {
             <div className="collapse navbar-collapse" id="nvbarNavAltMarkup">
                 <ul className="navbar-nav m-auto">
                     <li className="nav-item">
-                        <Link to="/" className="nav-link">Menu principal</Link>
+                        <Link to="/" className="nav-link">Volver a Inicio</Link>
                     </li>
-                    <li className="nav-item">
-                        <Link to="/listPokemon" className="nav-link">Pokémons</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/listTrainer" className="nav-link">Entrenadores Pokémon</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link to="/getTeams" className="nav-link">Equipos Pokémon</Link>
-                    </li> 
+                    
                 </ul>
             </div>
         </nav>

@@ -21,16 +21,16 @@ const AdminTienda: React.FC = () => {
 
     const [product_id, setProduct_id] = useState<string>('');
 
-    const token = location.state?.token || localStorage.getItem('userToken');
+    const token = location.state?.token;
 
-    const buscaTiendaId =  async () => {
+    const buscaTiendaId = async () => {
         try {
             const response = await axios.get('http://localhost:5000/obtenerEmpresa');
             setIdTienda(response.data.data.tienda['idtienda']);
 
             //alertita para verificar xd
             alert(response.data.data.tienda['idtienda'])
-            
+
         }//cierra try
 
         catch (err) {
@@ -39,7 +39,7 @@ const AdminTienda: React.FC = () => {
     };
 
 
-    useEffect( () => {
+    useEffect(() => {
         buscaTiendaId();
     }, []);
 
@@ -90,7 +90,7 @@ const AdminTienda: React.FC = () => {
             formData.append('logoProducto', productLogo);
         }
         //formData.append('tiendaId', Idtienda); // Reemplaza con el ID correcto de la tienda
-    
+
         try {
             if (selectedProduct) {
                 // Editar producto existente
@@ -100,7 +100,7 @@ const AdminTienda: React.FC = () => {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-    
+
                 // Actualizar la lista de productos después de la edición
                 const updatedProducts = products.map((product) =>
                     product._id === selectedProduct.id
@@ -118,7 +118,7 @@ const AdminTienda: React.FC = () => {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-    
+
                 // Actualizar la lista de productos después de la adición
                 const response = await axios.get('http://localhost:5000/obtenerProductos', {
                     headers: { Authorization: `Bearer ${token}` }
@@ -126,14 +126,14 @@ const AdminTienda: React.FC = () => {
                 setProducts(response.data.data.productos);
 
             }
-    
+
             handleClose();
         } catch (err) {
             console.error('Error al guardar el producto:', err);
             setError('Error al guardar el producto.');
         }
     };
-    
+
 
     const handleEditProduct = async () => {
         if (!selectedProduct || !selectedProduct.id) {
@@ -224,86 +224,106 @@ const AdminTienda: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <button
+            <div
                 style={{
                     position: 'fixed',
                     bottom: '20px',
                     right: '20px',
-                    backgroundColor: '#FFD700',
-                    height: '60px',
-                    width: '60px',
-                    border: 'none',
-                    color: 'black',
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                }}
-                onClick={() => {
-                    setSelectedProduct(null);
-                    setProductName('');
-                    setProductDescription('');
-                    setProductPrice('');
-                    setProductStock('');
-                    setProductLogo(null);
-                    setShowModal(true);
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    gap: '10px'
                 }}
             >
-                +
-            </button>
+                <button
+                    style={{
+                        backgroundColor: '#FFD700',
+                        height: '60px',
+                        width: '60px',
+                        border: 'none',
+                        color: 'black',
+                        fontSize: '24px',
+                        fontWeight: 'bold',
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                        setSelectedProduct(null);
+                        setProductName('');
+                        setProductDescription('');
+                        setProductPrice('');
+                        setProductStock('');
+                        setProductLogo(null);
+                        setShowModal(true);
+                    }}
+                >
+                    +
+                </button>
+                <button
+                    style={{
+                        backgroundColor: '#4a3ada',
+                        height: '60px',
+                        width: '60px',
+                        border: 'none',
+                        color: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => navigate('/EditarTienda', { state: { Idtienda, token } })}
+                >
+                    Editar Tienda
+                </button>
+            </div>
 
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedProduct ? 'Editar Producto' : 'Agregar Producto'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Group>
-                        <Form.Label>Nombre del Producto:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={productName}
-                            onChange={(e) => setProductName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <br />
-                    <Form.Group>
-                        <Form.Label>Descripción:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={productDescription}
-                            onChange={(e) => setProductDescription(e.target.value)}
-                        />
-                    </Form.Group>
-                    <br />
-                    <Form.Group>
-                        <Form.Label>Precio:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={productPrice}
-                            onChange={(e) => setProductPrice(e.target.value)}
-                        />
-                    </Form.Group>
-                    <br />
-                    <Form.Group>
-                        <Form.Label>Stock:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={productStock}
-                            onChange={(e) => setProductStock(e.target.value)}
-                        />
-                    </Form.Group>
-                    <br />
-                    <Form.Group>
-                        <Form.Label>Logo del Producto (formato .svg):</Form.Label>
-                        <Form.Control
-                            type="file"
-                            accept=".svg"
-                            onChange={(e) => {
-                                const target = e.target as HTMLInputElement;
-                                setProductLogo(target.files ? target.files[0] : null);
-                            }}
-                        />
-                    </Form.Group>
+                    <Form>
+                        <Form.Group>
+                            <Form.Label>Nombre del Producto</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={productName}
+                                onChange={(e) => setProductName(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Descripción del Producto</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={productDescription}
+                                onChange={(e) => setProductDescription(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Precio</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={productPrice}
+                                onChange={(e) => setProductPrice(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Stock</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={productStock}
+                                onChange={(e) => setProductStock(e.target.value)}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formProductLogo">
+                            <Form.Label>Logo del Producto</Form.Label>
+                            <Form.Control
+                                type="file"
+                                accept=".svg"
+                                onChange={(e) => setProductLogo((e.target as HTMLInputElement).files?.[0] || null)}
+                            />
+                        </Form.Group>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>

@@ -33,7 +33,7 @@ const BotonPaypal2: React.FC = () => {
 
     // Extrae los datos pasados a través de navigate
     const { precio, cantidad, productId, clienteId, token_sesion_usuario } = location.state || { precio: '0.00', cantidad: 0, productId: '', clienteId: '', token_sesion_usuario: '' };
-
+    const token = token_sesion_usuario;
     // Función para obtener los datos de usuario, empresa y producto
     const obtenerDatos = async () => {
         try {
@@ -124,11 +124,14 @@ const BotonPaypal2: React.FC = () => {
             if (response.status === 200) {
                 alert('Compra realizada con éxito.');
 
+                //verificando datos de facturacion
+
                 console.log('Datos de facturación:', jsonFacturacion);
                 const jsonString = JSON.stringify(jsonFacturacion, null, 2);
                 alert(jsonString);
 
-
+                localStorage.setItem('sesion', token);
+                //navigate('/ContenidoTienda', { state: token });\
                 navigate('/ContenidoTienda');
             } else {
                 alert('Error al actualizar el stock.');

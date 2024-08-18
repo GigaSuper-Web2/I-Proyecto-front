@@ -16,7 +16,10 @@ const ContenidoTienda: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     
-    const token = location.state?.token;
+    const token = location.state?.token || localStorage.getItem('sesion');
+    alert('usuario: ' + token);
+    localStorage.removeItem('usuario');
+
 
     useEffect(() => {
         const fetchProductsAndStore = async () => {
@@ -51,6 +54,10 @@ const ContenidoTienda: React.FC = () => {
     };
 
     const handleClose = () => setShowModal(false);
+
+    const handleEditUser = () => {
+        navigate('/EditarUsuario', { state: { token } });
+    };
 
     const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newQuantity = parseInt(event.target.value);
@@ -181,6 +188,24 @@ const ContenidoTienda: React.FC = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <button 
+                onClick={handleEditUser}
+                style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    left: '20px',
+                    backgroundColor: '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    zIndex: 1000
+                }}>
+                Editar Usuario
+            </button>
         </div>
     );
 };
