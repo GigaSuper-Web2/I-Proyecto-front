@@ -26,28 +26,35 @@ const LoginUsuario = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={verificar}>
-                <div>
-                    <input
-                        required
-                        type="email"
-                        placeholder="Correo"
-                        value={correo}
-                        onChange={(e) => setCorreo(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <input
-                        required
-                        type="password"
-                        placeholder="Contraseña"
-                        value={pass}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type="submit">Iniciar Sesion</button>
-            </form>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+            <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+                <h2 className="text-center mb-4">Iniciar Sesión</h2>
+                <form onSubmit={verificar}>
+                    <div className="form-group">
+                        <input
+                            required
+                            type="email"
+                            placeholder="Correo"
+                            className="form-control"
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            required
+                            type="password"
+                            placeholder="Contraseña"
+                            className="form-control"
+                            value={pass}
+                            onChange={(e) => setPassword(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-primary btn-block">Iniciar Sesión</button>
+                </form>
+            </div>
         </div>
     );
 };

@@ -51,24 +51,39 @@ const LoginEmpresa: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Login Empresa</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label htmlFor="passwd">Contraseña:</label>
-          <input type="password" id="passwd" value={passwd} onChange={(e) => setPasswd(e.target.value)} required />
-        </div>
-        <button type="submit">Iniciar Sesión</button>
-      </form>
-      <br />
-      {message && <p style={{ color: 'green' }}>{message}</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <br />
-      
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+        <h2 className="text-center mb-4">Login Empresa</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="passwd">Contraseña:</label>
+            <input
+              type="password"
+              id="passwd"
+              className="form-control"
+              value={passwd}
+              onChange={(e) => setPasswd(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary btn-block">Iniciar Sesión</button>
+        </form>
+        <br />
+        {message && <p style={{ color: 'green' }}>{message}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <br />
+      </div>
     </div>
   );
 };
