@@ -16,6 +16,7 @@ import PaginaInicio from './components/PaginaInicio';
 import AdminTienda from './components/AdminTienda';
 import EditarTienda from './components/EditarTienda';
 import EditarUsuario from './components/EditarUsuario';
+import PrimerProducto from './components/PrimerProducto';
 
 
 
@@ -41,6 +42,7 @@ root.render(
     <Route path='/AdminTienda' element={<AdminTienda />} />
     <Route path='/EditarTienda' element={<EditarTienda />} />
     <Route path='/EditarUsuario' element={<EditarUsuario />} />
+    <Route path='/PrimerProducto' element={<PrimerProducto />} />
     
     
     </Routes>

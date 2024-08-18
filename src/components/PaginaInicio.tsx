@@ -29,12 +29,12 @@ const PaginaInicio = () => {
         <br />
         <br />
         <h2>Iniciar sesion</h2>
-        <button onClick={() => Redirigir(2)}> Iniciar Sesion </button>
+        <button onClick={() => Redirigir(2)}> Iniciar Sesión </button>
         <br />
         <br />
         <hr />
         <h2>Entrar como dueño de la empresa</h2>
-        <button onClick={() => navigate('/LoginEmpresa')}> Soy el gfe</button>
+        <button onClick={() => navigate('/LoginEmpresa')}> Iniciar Sesión</button>
 
         <br />
         <br />

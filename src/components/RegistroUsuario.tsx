@@ -17,9 +17,9 @@ const RegistroUsuario = () => {
 
         if (passwd.trim() === "" || passwd2.trim() === "") {
             alert("Las contraseñas no pueden estar vacías.");
-        } else if (passwd !== passwd2){ 
+        } else if (passwd !== passwd2) {
             alert("Las contraseñas no coinciden.");
-        } else {  
+        } else {
             const userData = {
                 nombre,
                 apellidos,
@@ -43,35 +43,87 @@ const RegistroUsuario = () => {
                 console.error(error);
                 alert('Error');
             }
-        };
-            
+        }
     }
-        
 
     return (
-        <div>
-            Registro Usuario
-            <div>
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+            <div className="card p-4" style={{ maxWidth: '500px', width: '100%' }}>
+                <h2 className="text-center mb-4">Registro de Usuario</h2>
                 <form onSubmit={formlleno}>
-                    <div>
-                    <input type="text" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
+                    <div className="form-group">
+                        <label style={{ marginLeft: '5px' }}>Nombre</label>
+                        <input
+                            required
+                            type="text"
+                            placeholder="Nombre"
+                            className="form-control"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
                     </div>
-                    <div>
-                    <input type="text" placeholder="Apellidos" value={apellidos} onChange={(e) => setApellidos(e.target.value)} />
+                    <div className="form-group">
+                        <label style={{ marginLeft: '5px' }}>Apellidos</label>
+                        <input
+                            required
+                            type="text"
+                            placeholder="Apellidos"
+                            className="form-control"
+                            value={apellidos}
+                            onChange={(e) => setApellidos(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
                     </div>
-                    <div>
-                    <input type="email" placeholder="Correo Electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <div className="form-group">
+                        <label style={{ marginLeft: '5px' }}>Correo Electrónico</label>
+                        <input
+                            required
+                            type="email"
+                            placeholder="Correo Electrónico"
+                            className="form-control"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
                     </div>
-                    <div>
-                    <input type="password" placeholder="Contraseña" value={passwd} onChange={(e) => setPasswd(e.target.value)} />
+                    <div className="form-group">
+                        <label style={{ marginLeft: '5px' }}>Contraseña</label>
+                        <input
+                            required
+                            type="password"
+                            placeholder="Contraseña"
+                            className="form-control"
+                            value={passwd}
+                            onChange={(e) => setPasswd(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
                     </div>
-                    <div>
-                    <input type="password" placeholder="Repita la contraseña" value={passwd2} onChange={(e) => setPasswd2(e.target.value)} />
+                    <div className="form-group">
+                        <label style={{ marginLeft: '5px' }}>Repita la Contraseña</label>
+                        <input
+                            required
+                            type="password"
+                            placeholder="Repita la Contraseña"
+                            className="form-control"
+                            value={passwd2}
+                            onChange={(e) => setPasswd2(e.target.value)}
+                            style={{ marginBottom: '15px' }}
+                        />
                     </div>
-                    <div>
-                    <input type="text" placeholder="Lugar de Residencia" value={lugarResidencia} onChange={(e) => setLugarResidencia(e.target.value)} />
+                    <div className="form-group">
+                        <label style={{ marginLeft: '5px' }}>Lugar de Residencia</label>
+                        <input
+                            required
+                            type="text"
+                            placeholder="Lugar de Residencia"
+                            className="form-control"
+                            value={lugarResidencia}
+                            onChange={(e) => setLugarResidencia(e.target.value)}
+                            
+                        />
                     </div>
-                    <button type="submit">Registrar</button>
+                    <button type="submit" className="btn btn-primary btn-block mt-3">Registrar</button>
                 </form>
             </div>
         </div>
