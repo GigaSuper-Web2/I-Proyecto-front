@@ -7,7 +7,7 @@ const BotonPaypal2: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Se arma un diccionario vacio para guardar los datos en los campos 
+    // Aqui se estan guardando datos generales para simplemente tenerlos amno en caso de cualquier cambio en el envío a facturación
     const [datos, setDatos] = useState({
         usuario: {
             nombre: '',
@@ -28,13 +28,28 @@ const BotonPaypal2: React.FC = () => {
             precio: ''
         }
     });
-    const [jsonFacturacion, setJsonFacturacion] = useState({});
+    
+    // Aquí se define el JSON que se enviará a facturación
+    const [jsonFacturacion, setJsonFacturacion] = useState({
+        cliente: '',
+        detalles: [{
+            numeroLinea: 1,             //corregir en caso de ser necesario, porque no c ke es xd
+            codigoProducto: '',
+            cantidad: 0,
+            nombreProducto: '',
+            precioUnitario: 0,
+            montoTotal: 0,
+            subTotal: 0
+        }],
+        totalVenta: 0
+    });
+    
     const [loading, setLoading] = useState(true);
 
-    // Extrae los datos pasados a través de navigate
+    //aqui se reciben los datos para el pago de paypal
     const { precio, cantidad, productId, clienteId, token_sesion_usuario } = location.state || { precio: '0.00', cantidad: 0, productId: '', clienteId: '', token_sesion_usuario: '' };
     const token = token_sesion_usuario;
-    // Función para obtener los datos de usuario, empresa y producto
+
     const obtenerDatos = async () => {
         try {
             if (!token_sesion_usuario) {
@@ -42,7 +57,7 @@ const BotonPaypal2: React.FC = () => {
                 return;
             }
 
-            const [usuarioResponse, empresaResponse, productoResponse] = await Promise.all([ // hace las llamadas al mismo tiempo, antes del pago para recopialar los datos
+            const [usuarioResponse, empresaResponse, productoResponse] = await Promise.all([
                 axios.get(`http://localhost:5000/obtenerUsuario/${token_sesion_usuario}`),
                 axios.get('http://localhost:5000/obtenerEmpresa'),
                 axios.get(`http://localhost:5000/productoEspecifico/${productId}`)
@@ -73,23 +88,22 @@ const BotonPaypal2: React.FC = () => {
                 }
             });
 
-            // Construye el JSON de facturación
-            const json_facturacion = {
-                'nombre_comercial': empresa.nombreEmpresa || '',
-                'logo_empresa': empresa.logoTienda || '',
-                'ced_juridica': empresa.cedulaEmpresa || '',
-                'correo_empresa': empresa.email || '',
-                'cod_producto': productId || '',
-                'nombre_producto': producto.nombreProducto || '',
-                'cant_compra': cantidad || 0,
-                'precio_unitario': producto.precio || '',
-                'monto_total': precio || '',
-                'nombre_cliente': usuario.nombre || '',
-                'apellido_cliente': usuario.apellidos || '',
-                'direccion_usuario': usuario.lugarResidencia || ''
+            // Construimos y asignamos las variables al JSON que se enviará a facturación
+            const facturacionDetalles = {
+                cliente: empresa.nombreEmpresa || '',
+                detalles: [{
+                    numeroLinea: 1,
+                    codigoProducto: productId || '',
+                    cantidad: cantidad || 0,
+                    nombreProducto: producto.nombreProducto || '',
+                    precioUnitario: parseFloat(producto.precio || '0'),
+                    montoTotal: parseFloat(precio || '0'),
+                    subTotal: parseFloat(precio || '0') 
+                }],
+                totalVenta: parseFloat(precio || '0')
             };
 
-            setJsonFacturacion(json_facturacion);
+            setJsonFacturacion(facturacionDetalles);
 
         } catch (err) {
             console.error('Error al obtener los datos:', err);
@@ -99,20 +113,15 @@ const BotonPaypal2: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        obtenerDatos();
-    }, [token_sesion_usuario, productId]);
-
-    // Verifica si clienteId está disponible
-    if (!clienteId) {
-        alert('Cliente ID no proporcionado.');
-        navigate('/ContenidoTienda');
-        return null;
-    }
-
-    const initialOptions = {
-        clientId: clienteId,
-        currency: "USD"
+    const enviarAFacturacion = async () => {
+        try {
+            await axios.post('http://localhost:3001/factura', jsonFacturacion);
+            console.log('Factura enviada:', jsonFacturacion);
+            alert('Factura enviada exitosamente!');
+        } catch (error) {
+            console.error('Error al enviar la factura:', error + '.\nEsto puede ser porque tus datos registrados como cliente de Facturacion y Gigasuper no coinciden.');
+            alert('Error al enviar la factura. Inténtalo de nuevo.');
+        }
     };
 
     const onPurchase = async () => {
@@ -124,14 +133,10 @@ const BotonPaypal2: React.FC = () => {
             if (response.status === 200) {
                 alert('Compra realizada con éxito.');
 
-                //verificando datos de facturacion
-
-                console.log('Datos de facturación:', jsonFacturacion);
-                const jsonString = JSON.stringify(jsonFacturacion, null, 2);
-                alert(jsonString);
+                // Envia los datos de facturación
+                await enviarAFacturacion();
 
                 localStorage.setItem('sesion', token);
-                //navigate('/ContenidoTienda', { state: token });\
                 navigate('/ContenidoTienda');
             } else {
                 alert('Error al actualizar el stock.');
@@ -140,6 +145,21 @@ const BotonPaypal2: React.FC = () => {
             console.error('Error durante la actualización del stock:', error);
             alert('Error al realizar la compra. No se encuentran más productos disponibles en stock.');
         }
+    };
+
+    useEffect(() => {
+        obtenerDatos();
+    }, [token_sesion_usuario, productId]);
+
+    if (!clienteId) {
+        alert('Cliente ID no proporcionado.');
+        navigate('/ContenidoTienda');
+        return null;
+    }
+
+    const initialOptions = {
+        clientId: clienteId,
+        currency: "USD"
     };
 
     if (loading) {

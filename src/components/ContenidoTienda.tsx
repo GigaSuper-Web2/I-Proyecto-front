@@ -17,7 +17,7 @@ const ContenidoTienda: React.FC = () => {
     const location = useLocation();
     
     const token = location.state?.token || localStorage.getItem('sesion');
-    alert('usuario: ' + token);
+    //alert('usuario: ' + token);
     localStorage.removeItem('usuario');
 
 
