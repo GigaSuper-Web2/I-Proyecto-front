@@ -65,7 +65,7 @@ const RegistroTienda = () => {
 
       // Verificar firma digital
       const verifyResponse = await axios.post(
-        "http://http://10.90.30.80:5015/api/bank/validate-signature",
+        "http://10.90.30.80:5015/api/bank/validate-signature",
         verificationFormData
       );
 
