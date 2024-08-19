@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import axios, { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginEmpresa: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [passwd, setPasswd] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [passwd, setPasswd] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -15,44 +15,50 @@ const LoginEmpresa: React.FC = () => {
 
     try {
       // Realizar la solicitud GET al endpoint de login de la empresa
-      const response = await axios.get(`http://localhost:5000/loginEmpresa/${email}/${passwd}`);
+      const response = await axios.get(
+        `http://10.90.31.123:5015/loginEmpresa/${email}/${passwd}`
+      );
       const token = response.data.token;
-      setMessage('Login exitoso.');
+      setMessage("Login exitoso.");
 
-      setError('');
+      setError("");
 
       // Navegar a AdminTienda enviando el token
-      navigate('/AdminTienda', { state: { token } });
-
+      navigate("/AdminTienda", { state: { token } });
     } catch (err) {
       const error = err as AxiosError;
 
       if (error.response) {
         const statusCode = error.response.status;
         if (statusCode === 401) {
-          setMessage('');
-          setError('Error: Contraseña incorrecta.');
+          setMessage("");
+          setError("Error: Contraseña incorrecta.");
         } else if (statusCode === 404) {
-          setMessage('');
-          setError('Error: Correo electrónico no encontrado.');
+          setMessage("");
+          setError("Error: Correo electrónico no encontrado.");
         } else {
           const errorMessage = error.response.data as any;
-          setMessage('');
-          setError(`Error: ${errorMessage?.status_message || 'Error desconocido'}`);
+          setMessage("");
+          setError(
+            `Error: ${errorMessage?.status_message || "Error desconocido"}`
+          );
         }
       } else if (error.request) {
-        setMessage('');
-        setError('Error: No se recibió respuesta del servidor.');
+        setMessage("");
+        setError("Error: No se recibió respuesta del servidor.");
       } else {
-        setMessage('');
-        setError('Error: Problema al configurar la solicitud.');
+        setMessage("");
+        setError("Error: Problema al configurar la solicitud.");
       }
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-      <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div className="card p-4" style={{ maxWidth: "400px", width: "100%" }}>
         <h2 className="text-center mb-4">Login Empresa</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -77,11 +83,13 @@ const LoginEmpresa: React.FC = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary btn-block">Iniciar Sesión</button>
+          <button type="submit" className="btn btn-primary btn-block">
+            Iniciar Sesión
+          </button>
         </form>
         <br />
-        {message && <p style={{ color: 'green' }}>{message}</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {message && <p style={{ color: "green" }}>{message}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
         <br />
       </div>
     </div>
