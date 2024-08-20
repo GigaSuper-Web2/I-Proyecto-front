@@ -25,7 +25,7 @@ const ContenidoTienda: React.FC = () => {
       try {
         // Obtener productos
         const productsResponse = await axios.get(
-          "http://10.90.31.123:5015/obtenerProductos",
+          "http://10.90.31.123:5000/obtenerProductos",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -34,7 +34,7 @@ const ContenidoTienda: React.FC = () => {
 
         // Obtener información de la tienda
         const storeResponse = await axios.get(
-          "http://10.90.31.123:5015/obtenerEmpresa",
+          "http://10.90.31.123:5000/obtenerEmpresa",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

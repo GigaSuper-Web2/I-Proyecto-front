@@ -52,22 +52,31 @@ const RegistroTienda = () => {
       );
       return;
     }
+    alert("firma digital: " + datoFirma);
 
     try {
       // Crear FormData para la verificación de la firma
+      alert("llega aqui 1");
       const verificationFormData = new FormData();
       verificationFormData.append("idNumber", cedEmpresa);
+      alert("llega aqui 2");
+
       //alert(cedEmpresa);
       verificationFormData.append("idType", categoria);
+      alert("llega aqui 3");
+
       verificationFormData.append("publicKeyFile", publicKeyFile); // Incluye el archivo .pem de clave pública
+      alert("llega aqui 4");
+
       verificationFormData.append("signature", datoFirma); // Firma digital como texto
-      //alert('firma digital' + datoFirma);
+      alert("llega aqui 5");
 
       // Verificar firma digital
       const verifyResponse = await axios.post(
-        "http://10.90.31.200/api/bank/validate-signature",
+        "http://localhost:5001/bank/validate-signature",
         verificationFormData
       );
+      alert("llega aqui 6");
 
       if (verifyResponse.status === 200) {
         alert("La firma es válida.");
@@ -85,7 +94,7 @@ const RegistroTienda = () => {
 
         // Enviar FormData al servidor para registrar la tienda
         const registerResponse = await axios.post(
-          "http://10.90.31.123:5015/registrarTienda",
+          "http://10.90.31.123:5000/registrarTienda",
           formData
         );
 

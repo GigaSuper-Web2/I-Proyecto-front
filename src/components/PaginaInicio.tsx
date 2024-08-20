@@ -1,6 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const PaginaInicio = () => {
   const navigate = useNavigate();
@@ -8,13 +8,13 @@ const PaginaInicio = () => {
   const Redirigir = (opcion: number) => {
     switch (opcion) {
       case 1: // opción de registrar usuario
-        navigate('/RegistroUsuario');
+        navigate("/RegistroUsuario");
         break;
       case 2: // opción de login usuario
-        navigate('/LoginUsuario');
+        navigate("/LoginUsuario");
         break;
       case 3: // opción de iniciar sesión como empresa
-        navigate('/LoginEmpresa');
+        navigate("/LoginEmpresa");
         break;
     }
   };
@@ -35,7 +35,11 @@ const PaginaInicio = () => {
         Iniciar Sesión
       </button>
       <p className="mt-4">
-        Gigasuper te ofrece la posibilidad de montar tu propio negocio ji ji ji ja y texto de relleno Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolore deleniti, fugiat, ex libero suscipit beatae perferendis quaerat exercitationem et ipsa sed! Eveniet ad numquam saepe atque, blanditiis est iste deserunt.
+        Gigasuper te ofrece la posibilidad de montar tu propio negocio ji ji ji
+        ja y texto de relleno Lorem ipsum, dolor sit amet consectetur
+        adipisicing elit. Dolore deleniti, fugiat, ex libero suscipit beatae
+        perferendis quaerat exercitationem et ipsa sed! Eveniet ad numquam saepe
+        atque, blanditiis est iste deserunt.
       </p>
     </div>
   );

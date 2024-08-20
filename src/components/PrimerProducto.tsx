@@ -17,7 +17,7 @@ const PrimerProducto = () => {
   const obtenerEmpresaId = async () => {
     try {
       const response = await axios.get(
-        `http://10.90.31.123:5015/obtenerEmpresa`
+        `http://10.90.31.123:5000/obtenerEmpresa`
       );
       setIdTienda(response.data.data.tienda["idtienda"]);
       //alert(response.data.data.tienda['idtienda']);
@@ -72,7 +72,7 @@ const PrimerProducto = () => {
 
     try {
       const response = await axios.post(
-        "http://10.90.31.123:5015/agregarProducto",
+        "http://10.90.31.123:5000/agregarProducto",
         data
       );
       alert("Producto agregado con éxito");

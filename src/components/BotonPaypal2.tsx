@@ -69,10 +69,10 @@ const BotonPaypal2: React.FC = () => {
       const [usuarioResponse, empresaResponse, productoResponse] =
         await Promise.all([
           axios.get(
-            `http://10.90.31.123:5015/obtenerUsuario/${token_sesion_usuario}`
+            `http://10.90.31.123:5000/obtenerUsuario/${token_sesion_usuario}`
           ),
-          axios.get("http://10.90.31.123:5015/obtenerEmpresa"),
-          axios.get(`http://10.90.31.123:5015/productoEspecifico/${productId}`),
+          axios.get("http://10.90.31.123:5000/obtenerEmpresa"),
+          axios.get(`http://10.90.31.123:5000/productoEspecifico/${productId}`),
         ]);
 
       const usuario = usuarioResponse.data.data.user;
@@ -146,7 +146,7 @@ const BotonPaypal2: React.FC = () => {
   const onPurchase = async () => {
     try {
       const response = await axios.put(
-        `http://10.90.31.123:5015/actualizarStock/${productId}`,
+        `http://10.90.31.123:5000/actualizarStock/${productId}`,
         {
           cantidadComprada: cantidad,
         }

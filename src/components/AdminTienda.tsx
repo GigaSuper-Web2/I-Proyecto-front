@@ -25,9 +25,7 @@ const AdminTienda: React.FC = () => {
 
   const buscaTiendaId = async () => {
     try {
-      const response = await axios.get(
-        "http://10.90.31.123:5015/obtenerEmpresa"
-      );
+      const response = await axios.get("http:///obtenerEmpresa");
       setIdTienda(response.data.data.tienda["idtienda"]);
 
       //alertita para verificar xd
@@ -47,7 +45,7 @@ const AdminTienda: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://10.90.31.123:5015/obtenerProductos",
+          "http://10.90.31.123:5000/obtenerProductos",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -97,7 +95,7 @@ const AdminTienda: React.FC = () => {
       if (selectedProduct) {
         // Editar producto existente
         await axios.put(
-          `http://10.90.31.123:5015/editarProducto/${selectedProduct.id}`,
+          `http://10.90.31.123:5000/editarProducto/${selectedProduct.id}`,
           formData,
           {
             headers: {
@@ -123,7 +121,7 @@ const AdminTienda: React.FC = () => {
         navigate("/AdminTienda");
       } else {
         // Agregar nuevo producto
-        await axios.post("http://10.90.31.123:5015/agregarProducto", formData, {
+        await axios.post("http://10.90.31.123:5000/agregarProducto", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -132,7 +130,7 @@ const AdminTienda: React.FC = () => {
 
         // Actualizar la lista de productos después de la adición
         const response = await axios.get(
-          "http://10.90.31.123:5015/obtenerProductos",
+          "http://10.90.31.123:5000/obtenerProductos",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -164,7 +162,7 @@ const AdminTienda: React.FC = () => {
 
     try {
       await axios.put(
-        `http://10.90.31.123:5015/editarProducto/${selectedProduct.id}`,
+        `http://10.90.31.123:5000/editarProducto/${selectedProduct.id}`,
         formData,
         {
           headers: {
@@ -198,7 +196,7 @@ const AdminTienda: React.FC = () => {
   const handleDeleteProduct = async (productId: string) => {
     try {
       await axios.delete(
-        `http://10.90.31.123:5015/eliminarProducto/${productId}`,
+        `http://10.90.31.123:5000/eliminarProducto/${productId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

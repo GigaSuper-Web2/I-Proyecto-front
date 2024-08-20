@@ -30,7 +30,7 @@ const RegistroUsuario = () => {
 
       try {
         const response = await axios.post(
-          "http://10.90.31.123:5015/registrarUsuario",
+          "http://10.90.31.123:5000/registrarUsuario",
           userData,
           {
             headers: {

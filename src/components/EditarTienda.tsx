@@ -31,7 +31,7 @@ const EditarTienda = () => {
 
     try {
       const response = await axios.put(
-        `http://10.90.31.123:5015/editarTienda/${Idtienda}`,
+        `http://10.90.31.123:5000/editarTienda/${Idtienda}`,
         formData,
         {
           headers: {

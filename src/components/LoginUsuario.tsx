@@ -11,7 +11,7 @@ const LoginUsuario = () => {
     e.preventDefault();
 
     try {
-      const url = `http://10.90.31.123:5015/loginUsuario/${correo}/${pass}`;
+      const url = `http://10.90.31.123:5000/loginUsuario/${correo}/${pass}`;
       const verifyResponse = await axios.get(url);
 
       if (verifyResponse.status === 200) {

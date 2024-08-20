@@ -16,7 +16,7 @@ const LoginEmpresa: React.FC = () => {
     try {
       // Realizar la solicitud GET al endpoint de login de la empresa
       const response = await axios.get(
-        `http://10.90.31.123:5015/loginEmpresa/${email}/${passwd}`
+        `http://10.90.31.123:5000/loginEmpresa/${email}/${passwd}`
       );
       const token = response.data.token;
       setMessage("Login exitoso.");

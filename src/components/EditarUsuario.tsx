@@ -33,7 +33,7 @@ const EditarUsuario = () => {
 
     try {
       const response = await axios.put(
-        `http://10.90.31.123:5015/editarUsuario/${token}`,
+        `http://10.90.31.123:5000/editarUsuario/${token}`,
         userData,
         {
           headers: {
