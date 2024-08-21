@@ -32,9 +32,9 @@ const BotonPaypal2: React.FC = () => {
   // Aquí se define el JSON que se enviará a facturación
   const [jsonFacturacion, setJsonFacturacion] = useState({
     cliente: "",
+    correoCliente: "",
     detalles: [
       {
-        numeroLinea: 1, //corregir en caso de ser necesario, porque no c ke es xd
         codigoProducto: "",
         cantidad: 0,
         nombreProducto: "",
@@ -103,9 +103,9 @@ const BotonPaypal2: React.FC = () => {
       // Construimos y asignamos las variables al JSON que se enviará a facturación
       const facturacionDetalles = {
         cliente: empresa.nombreEmpresa || "",
+        correoCliente: usuario.email,
         detalles: [
           {
-            numeroLinea: 1,
             codigoProducto: productId || "",
             cantidad: cantidad || 0,
             nombreProducto: producto.nombreProducto || "",
@@ -128,7 +128,7 @@ const BotonPaypal2: React.FC = () => {
 
   const enviarAFacturacion = async () => {
     try {
-      await axios.post("http://localhost:3001/factura", jsonFacturacion); // falta actualizar ip con server y metodo
+      await axios.post("http://10.90.31.119:3000/factura", jsonFacturacion); // falta actualizar ip con server y metodo
       console.log("Factura enviada:", jsonFacturacion);
       alert("Factura enviada exitosamente!");
     } catch (error) {
