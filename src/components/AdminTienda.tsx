@@ -25,7 +25,9 @@ const AdminTienda: React.FC = () => {
 
   const buscaTiendaId = async () => {
     try {
-      const response = await axios.get("http:///obtenerEmpresa");
+      const response = await axios.get(
+        "http://10.90.31.123:5000/obtenerEmpresa"
+      );
       setIdTienda(response.data.data.tienda["idtienda"]);
 
       //alertita para verificar xd
