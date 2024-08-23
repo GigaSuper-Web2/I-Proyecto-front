@@ -56,27 +56,21 @@ const RegistroTienda = () => {
 
     try {
       // Crear FormData para la verificación de la firma
-      alert("llega aqui 1");
       const verificationFormData = new FormData();
       verificationFormData.append("idNumber", cedEmpresa);
-      alert("llega aqui 2");
 
       //alert(cedEmpresa);
       verificationFormData.append("idType", categoria);
-      alert("llega aqui 3");
 
       verificationFormData.append("publicKeyFile", publicKeyFile); // Incluye el archivo .pem de clave pública
-      alert("llega aqui 4");
 
       verificationFormData.append("signature", datoFirma); // Firma digital como texto
-      alert("llega aqui 5");
 
       // Verificar firma digital
       const verifyResponse = await axios.post(
         "http://10.90.31.200/bank/validate-signature",
         verificationFormData
       );
-      alert("llega aqui 6");
 
       if (verifyResponse.status === 200) {
         alert("La firma es válida.");
